@@ -7,4 +7,4 @@ temp/
 tmp/*
 !tmp/.gitkeep
 
-covarage
+covarage/
