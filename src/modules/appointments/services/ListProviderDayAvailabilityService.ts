@@ -3,8 +3,6 @@ import { getHours, isAfter } from 'date-fns';
 
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 
-// import User from '@modules/users/infra/typeorm/entities/User';
-
 interface IRequest {
   provider_id: string;
   day: number;
@@ -40,13 +38,12 @@ class ListProviderDayAvailabilityService {
     );
 
     const hourStart = 8;
+    const currentDate = new Date(Date.now());
 
     const eachHourArray = Array.from(
       { length: 10 },
       (_, index) => index + hourStart,
     );
-
-    const currentDate = new Date(Date.now());
 
     const availability = eachHourArray.map(hour => {
       const hasAppointmentInHour = appointments.find(
@@ -54,11 +51,13 @@ class ListProviderDayAvailabilityService {
       );
 
       const compareDate = new Date(year, month - 1, day, hour);
+
       return {
         hour,
         available: !hasAppointmentInHour && isAfter(compareDate, currentDate),
       };
     });
+
     return availability;
   }
 }
