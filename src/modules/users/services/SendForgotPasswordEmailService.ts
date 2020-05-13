@@ -1,12 +1,10 @@
-import { injectable, inject } from 'tsyringe';
+import { inject, injectable } from 'tsyringe';
 import path from 'path';
 
 import AppError from '@shared/errors/AppError';
-import IUsersRepository from '@modules/users/repositories/IUsersRepository';
-import IUserTokenaRepository from '@modules/users/repositories/IUsersTokensRepository';
 import IMailProvider from '@shared/container/providers/MailProvider/models/IMailProvider';
-
-// import User from '@modules/users/infra/typeorm/entities/User';
+import IUsersRepository from '@modules/users/repositories/IUsersRepository';
+import IUsersTokensRepository from '@modules/users/repositories/IUsersTokensRepository';
 
 interface IRequest {
   email: string;
@@ -21,24 +19,24 @@ class SendForgotPasswordEmailService {
     @inject('MailProvider')
     private mailProvider: IMailProvider,
 
-    @inject('UserTokensRepository')
-    private userTokensRepository: IUserTokenaRepository,
+    @inject('UsersTokensRepository')
+    private userTokensRepository: IUsersTokensRepository,
   ) {}
 
   public async execute({ email }: IRequest): Promise<void> {
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
-      throw new AppError('User does not exists');
+      throw new AppError('User does not exists.');
     }
 
     const { token } = await this.userTokensRepository.generate(user.id);
 
-    const forgotPasswordTemplate = path.resolve(
+    const forgotPsswordTemplate = path.resolve(
       __dirname,
       '..',
       'views',
-      'forogot_password.hbs',
+      'forgot_password.hbs',
     );
 
     await this.mailProvider.sendMail({
@@ -46,12 +44,12 @@ class SendForgotPasswordEmailService {
         name: user.name,
         email: user.email,
       },
-      subject: '[GoBarber] Recuperação de senha',
+      subject: '[GoBarber] Recuperação de Senha',
       templateData: {
-        file: forgotPasswordTemplate,
+        file: forgotPsswordTemplate,
         variables: {
           name: user.name,
-          link: `${process.env.APP_WEB_URL}reset_password?token=${token}`,
+          link: `${process.env.APP_WEB_URL}/reset_password?token=${token}`,
         },
       },
     });
