@@ -1,3 +1,4 @@
+
 [
   {
     "name": "default",
@@ -23,12 +24,9 @@
     "host": "localhost",
     "port": 27017,
     "database": "gobarber11",
-    "entities": [
-      "./src/modules/**/infra/typeorm/entities/*.ts"
-    ],
     "useUnifiedTopology": true,
-    "migrations": [
-      "./src/shared/infra/typeorm/schemas/*.ts"
+    "entities": [
+      "./src/modules/**/infra/typeorm/schemas/*.ts"
     ]
   }
 ]
