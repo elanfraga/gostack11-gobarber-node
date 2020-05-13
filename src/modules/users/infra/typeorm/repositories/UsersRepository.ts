@@ -2,7 +2,7 @@ import { getRepository, Repository, Not } from 'typeorm';
 
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import ICreateUserDTO from '@modules/users/dtos/ICreateUserDTO';
-import IFindProvidersDTO from '@modules/appointments/dtos/IFindProvidersDTO';
+import IFindAllProvidersDTO from '@modules/users/dtos/IFindAllProvidersDTO';
 
 import User from '@modules/users/infra/typeorm/entities/User';
 
@@ -29,7 +29,7 @@ class UsersRepository implements IUsersRepository {
 
   public async findAllProviders({
     except_user_id,
-  }: IFindProvidersDTO): Promise<User[]> {
+  }: IFindAllProvidersDTO): Promise<User[]> {
     let users: User[];
 
     if (except_user_id) {
